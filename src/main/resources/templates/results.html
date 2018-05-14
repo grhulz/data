@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Data Project</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Result</h1>
+<th:block th:unless="${data.error}">
+    <p th:text="'Raw Data: ' + ${data.rawData}"/>
+    <p th:text="'Processed Data: ' + ${data.processedData}"/>
+    <p th:text="'Min: ' + ${data.min}"/>
+    <p th:text="'Max: ' + ${data.max}"/>
+    <p th:text="'Range: ' + ${data.range}"/>
+    <p th:text="'Mean: ' + ${data.mean}"/>
+    <p th:text="'Median: ' + ${data.median}"/>
+    <p th:text="'Mode: ' + ${data.mode}"/>
+    <p th:text="'Lower Quartile: ' + ${data.lowerQuartile1}"/>
+    <p th:text="'Upper Quartile: ' + ${data.upperQuartile1}"/>
+    <div id="container" style="height: 400px; margin: auto; min-width: 400px; max-width: 600px"></div>
+</th:block>
+<p th:if="${data.error}" th:text="'Error Message: ' + ${data.errorMessage}"/>
+<a href="/data">Enter more datapoints</a>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<script>
+    Highcharts.chart('container', {
+
+        chart: {
+            type: 'boxplot'
+        },
+
+        title: {
+            text: 'Highcharts box plot styling'
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        xAxis: {
+            categories: ['Full Data Set', 'Without Outliers'],
+            title: {
+                text: 'Experiment Data'
+            }
+        },
+
+        yAxis: {
+            title: {
+                text: 'Observations'
+            }
+        },
+
+        plotOptions: {
+            boxplot: {
+                fillColor: '#F0F0E0',
+                lineWidth: 2,
+                medianColor: '#0C5DA5',
+                medianWidth: 3,
+                stemColor: '#A63400',
+                stemDashStyle: 'dot',
+                stemWidth: 1,
+                whiskerColor: '#3D9200',
+                whiskerLength: '20%',
+                whiskerWidth: 3
+            }
+        },
+
+        series: [{
+            name: 'Observations',
+            data: [
+
+                [[[${data.min}]], [[${data.lowerQuartile1}]], [[${data.median}]], [[${data.upperQuartile1}]], [[${data.max}]]]
+
+            ]
+
+        }]
+
+    });
+</script>
+</body>
+</html>
